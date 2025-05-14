@@ -2,10 +2,18 @@
 
 window.addEventListener('DOMContentLoaded', init);
 
-function init() {
-  const recipes = getRecipesFromStorage();  // A9
-  addRecipesToDocument(recipes);            // A10‑A11
-  initFormHandler();                        // B‑section
+async function init() {
+  let recipes = getRecipesFromStorage();      // already defined earlier
+
+  /* 👇 NEW: re‑seed if localStorage was empty */
+  if (recipes.length === 0) {
+    const resp = await fetch('reference/recipes.json');
+    recipes = await resp.json();
+    localStorage.setItem('recipes', JSON.stringify(recipes));
+  }
+
+  addRecipesToDocument(recipes);
+  initFormHandler();
 }
 
 /* ---------- A9 ---------- */
